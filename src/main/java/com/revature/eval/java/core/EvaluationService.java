@@ -129,41 +129,36 @@ public class EvaluationService {
 		char letter;
 		for(int i = 0; i < string.length(); i++) {
 			letter = string.toUpperCase().charAt(i);
-			if(["AEIOULNRST"]) {
-				
+			if(letter == 'A' || letter == 'E' || letter == 'I' || letter == 'O' ||
+					letter =='U' || letter =='L' || letter == 'N' ||
+					letter == 'R' || letter == 'S' || letter == 'T') {
 				score += 1;
 			}
-			else if(["DG"]) {
-				
+			else if(letter == 'D' || letter == 'G') {
 				score += 2;
 			}
-			else if(["BCMP"]) {
-				
+			else if(letter =='B' || letter=='C' || letter =='M' || letter == 'P') {
 				score += 3;
 			}
-			else if(["FHVWY"]) {
-				
+			else if(letter == 'F' || letter == 'H' || letter == 'V' || letter == 'W' ||
+					letter == 'Y') {
 				score += 4;
 			}
-			else if(["K"]) {
-				
+			else if(letter == 'K') {
 				score += 5;
 			}
-			else if(["JX"]) {
-				
+			else if(letter == 'J' || letter == 'X') {
 				score += 8;
 			}
-			else if(["QZ"]) {
-				
+			else if(letter == 'Q' || letter == 'Z') {
 				score += 10;
 			}
 			else {
 				
 			}
-				
 			
 		}
-		return 0;
+		return score;
 	}
 
 	/**
