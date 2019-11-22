@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -193,8 +194,19 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String[] numbers = string.split("\\W");
+		String number = new String();
+		for(int i = 0; i < numbers.length; i++) {
+			if(numbers[i].equals("")) {
+				continue;
+			}
+			number = number.concat(numbers[i]);
+		}
+		if(number.length() > 11 || number.split("\\d").length > 1)
+		{
+			throw new IllegalArgumentException();
+		}
+		return number;
 	}
 
 	/**
@@ -208,7 +220,20 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		String words[] = string.split("\\W");
+		Map<String, Integer> count = new HashMap<>();
+		for(String word : words) {
+			if(word.equals("")) {
+				continue;
+			}
+			if(count.containsKey(word)) {
+				count.put(word, count.get(word) + 1);
+			}
+			else {
+				count.put(word, 1);
+			}
+		}
+		return count;
 	}
 
 	/**
@@ -251,6 +276,18 @@ public class EvaluationService {
 
 		public int indexOf(T t) {
 			// TODO Write an implementation for this method declaration
+			int index = this.sortedList.size() / 2;
+			for(int i = 0; i < this.sortedList.size() / 2; i++) {
+				if(t == this.sortedList.get(index)) {
+					return index;
+				}
+//				else if(t > this.sortedList.get(index)) {
+//					index += index/2;
+//				}
+//				else {
+//					index -= index/2;
+//				}
+			}
 			return 0;
 		}
 
