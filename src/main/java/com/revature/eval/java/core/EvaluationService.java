@@ -14,8 +14,11 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String reverse(String string) {
-		
-		return "";
+		String reversed = new String();
+		for(int i = string.length() - 1; i >= 0; i--) {
+			reversed += string.charAt(i);
+		}
+		return reversed;
 	}
 
 	/**
@@ -28,7 +31,15 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		String acronym = new String();
+		String[] words = phrase.split("\\W");
+		for(int i = 0; i < words.length; i++) {
+			if(words[i].equals("")) {
+				continue;
+			}
+			acronym += words[i].charAt(0);
+		}
+		return acronym.toUpperCase();
 	}
 
 	/**
@@ -82,17 +93,18 @@ public class EvaluationService {
 
 		public boolean isEquilateral() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			return (this.sideOne == this.sideThree && this.sideOne == this.sideTwo);
 		}
 
 		public boolean isIsosceles() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			return (this.sideOne == this.sideThree || this.sideOne == this.sideTwo || 
+					this.sideTwo == this.sideThree);
 		}
 
 		public boolean isScalene() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			return !(this.sideOne == this.sideThree && this.sideOne == this.sideTwo);
 		}
 
 	}
@@ -113,7 +125,44 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
+		int score = 0;
+		char letter;
+		for(int i = 0; i < string.length(); i++) {
+			letter = string.toUpperCase().charAt(i);
+			if(["AEIOULNRST"]) {
+				
+				score += 1;
+			}
+			else if(["DG"]) {
+				
+				score += 2;
+			}
+			else if(["BCMP"]) {
+				
+				score += 3;
+			}
+			else if(["FHVWY"]) {
+				
+				score += 4;
+			}
+			else if(["K"]) {
+				
+				score += 5;
+			}
+			else if(["JX"]) {
+				
+				score += 8;
+			}
+			else if(["QZ"]) {
+				
+				score += 10;
+			}
+			else {
+				
+			}
+				
+			
+		}
 		return 0;
 	}
 
@@ -417,7 +466,7 @@ public class EvaluationService {
 	}
 
 	/**
-	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
+	 * 16. Determine if a sentence is a pangram. A pangram (Greek: Ï€Î±Î½ Î³Ï�Î¬Î¼Î¼Î±, pan
 	 * gramma, "every letter") is a sentence using every letter of the alphabet at
 	 * least once. The best known English pangram is:
 	 * 
