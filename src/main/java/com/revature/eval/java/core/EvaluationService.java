@@ -277,16 +277,18 @@ public class EvaluationService {
 		public int indexOf(T t) {
 			// TODO Write an implementation for this method declaration
 			int index = this.sortedList.size() / 2;
-			for(int i = 0; i < this.sortedList.size() / 2; i++) {
-				if(t == this.sortedList.get(index)) {
+			float temp;
+			for(int i = 0; i < Math.ceil(Math.log(this.sortedList.size())); i++) {
+				temp = index;
+				if((int)t == (int)this.sortedList.get(index)) {
 					return index;
 				}
-//				else if(t > this.sortedList.get(index)) {
-//					index += index/2;
-//				}
-//				else {
-//					index -= index/2;
-//				}
+				else if((int)t > (int)this.sortedList.get(index)) {
+					index += Math.ceil(temp/2);
+				}
+				else {
+					index -= Math.ceil(temp/2);
+				}
 			}
 			return 0;
 		}
@@ -325,7 +327,32 @@ public class EvaluationService {
 	 */
 	public String toPigLatin(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		if(string.contains(" ")) {
+			String[] words = string.split(" ");
+			for(int i = 0; i < words.length; i++) {
+				while(!(words[i].charAt(0) == 'a' || words[i].charAt(0) == 'e' || words[i].charAt(0) == 'i'
+						|| words[i].charAt(0) == 'o' || words[i].charAt(0) == 'u')) {
+					char con = words[i].charAt(0);
+					words[i] = words[i].substring(1) + con;
+				}
+				words[i] += "ay";
+			}
+			String newString = "";
+			for(int i = 0; i < words.length; i++) {
+				newString += words[i] + " ";
+			}
+			string = newString.substring(0, newString.length() - 1);
+		}
+		else {
+			while(!(string.charAt(0) == 'a' || string.charAt(0) == 'e' || string.charAt(0) == 'i'
+					|| string.charAt(0) == 'o' || string.charAt(0) == 'u')) {
+				char con = string.charAt(0);
+				string = string.substring(1) + con;
+			}
+			string += "ay";
+			
+		}
+		return string;
 	}
 
 	/**
@@ -345,6 +372,23 @@ public class EvaluationService {
 	 */
 	public boolean isArmstrongNumber(int input) {
 		// TODO Write an implementation for this method declaration
+		int size = (int)Math.log10(input) + 1;
+		int[] numbers = new int[size];
+		int sum = 0;
+		int temp = input;
+		for(int i = 0; i < size; i++) {
+			//get the last digit by getting the remainder of 10
+			numbers[i] = temp % 10;
+			//cut off that last digit
+			temp /= 10;
+		}
+		
+		for(int i = 0; i < size; i++) {
+			sum += Math.pow(numbers[i], size);
+		}
+		if(sum == input) {
+			return true;
+		}
 		return false;
 	}
 
