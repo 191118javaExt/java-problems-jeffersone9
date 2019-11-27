@@ -459,7 +459,37 @@ public class EvaluationService {
 
 		public String rotate(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			char newChar = ' ';
+			String newString="";
+			for(int i = 0; i < string.length(); i++) {
+				//capital letters
+				if(string.charAt(i) > 64 && string.charAt(i) < 91)
+				{
+					//rollover
+					if(string.charAt(i) + key > 90) {
+						newChar = (char) (string.charAt(i) + key - 90 + 64);
+					}
+					else {
+						newChar = (char)(string.charAt(i) + key);
+					}
+				}
+				//lower case letters
+				else if(string.charAt(i) > 96 && string.charAt(i) < 123) {
+					//rollover
+					if(string.charAt(i) + key > 122) {
+						newChar = (char) (string.charAt(i) + key - 122 + 96);
+					}
+					else {
+						newChar = (char)(string.charAt(i) + key);
+					}
+				}
+				//anything that's not a letter
+				else {
+					newChar = string.charAt(i);
+				}
+				newString += newChar;
+			}
+			return newString;
 		}
 
 	}
@@ -477,7 +507,31 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
+		int n = 1;
+		int number = 3;
+		boolean isPrime;
+		if(i > 0) {
+			//create a list of primes
+			List<Integer> primes = new ArrayList();
+			primes.add(2);
+			while(n < i ) {
+				//a number is prime if it isn't divisible by the other primes
+				isPrime = true;
+				for(int prime : primes) {
+					if(number % prime == 0) {
+						isPrime = false;
+					}
+				}
+				if(isPrime) {
+					primes.add(number);
+					n++;
+				}
+				//no such thing as an even prime number
+				number += 2;
+			}
+			
+			return primes.get(n - 1);
+		}
 		return 0;
 	}
 
@@ -515,7 +569,31 @@ public class EvaluationService {
 		 */
 		public static String encode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			String newString = "";
+			char newChar = ' ';
+			int count = 0; //counter for every 5 inserts
+			string = string.toLowerCase();
+			for(int i = 0; i < string.length(); i++) {
+				//lower case letters
+				if(string.charAt(i) > 96 && string.charAt(i) < 123) {
+					newChar = (char) (123 - string.charAt(i) + 96);
+					newString += newChar;
+					count++;
+				}
+				//add numbers
+				else if(string.charAt(i) > 47 && string.charAt(i) < 58) {
+					newString += string.charAt(i);
+					count++;
+				}
+				//blank spaces and punctuation
+				else {
+					continue;
+				}
+				if(count % 5 ==0) {
+					newString += " ";
+				}
+			}
+			return newString.trim();
 		}
 
 		/**
@@ -526,7 +604,25 @@ public class EvaluationService {
 		 */
 		public static String decode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			String newString = "";
+			char newChar = ' ';
+			string = string.toLowerCase();
+			for(int i = 0; i < string.length(); i++) {
+				//lower case letters
+				if(string.charAt(i) > 96 && string.charAt(i) < 123) {
+					newChar = (char) (123 - string.charAt(i) + 96);
+					newString += newChar;
+				}
+				//add numbers
+				else if(string.charAt(i) > 47 && string.charAt(i) < 58) {
+					newString += string.charAt(i);
+				}
+				//blank spaces and punctuation
+				else {
+					continue;
+				}
+			}
+			return newString.replace(" ", "");
 		}
 	}
 
@@ -554,7 +650,52 @@ public class EvaluationService {
 	 */
 	public boolean isValidIsbn(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		//split into just numbers
+				String isbn = "";
+				for(int i = 0; i < string.length() - 1; i++) {
+					if(string.charAt(i) == '1' || string.charAt(i) == '2' || string.charAt(i) == '3' ||
+							string.charAt(i) == '4' || string.charAt(i) == '5' || string.charAt(i) == '6' ||
+							string.charAt(i) == '7' || string.charAt(i) == '8' || string.charAt(i) == '9'
+							|| string.charAt(i) == '0') {
+						isbn += string.charAt(i);
+					}
+					else if(string.charAt(i) == '-') {
+						continue;
+					}
+					else {
+						return false;
+					}
+				}
+				//now check the check character
+				int i = string.length() - 1;
+				if(string.charAt(i) == '1' || string.charAt(i) == '2' || string.charAt(i) == '3' ||
+						string.charAt(i) == '4' || string.charAt(i) == '5' || string.charAt(i) == '6' ||
+						string.charAt(i) == '7' || string.charAt(i) == '8' || string.charAt(i) == '9'
+						|| string.charAt(i) == '0' || string.charAt(i) == 'X') {
+					isbn += string.charAt(i);
+				}
+				else {
+					return false;
+				}
+				//check if isbn is a 10 digit number
+				if(isbn.length() != 10) {
+					return false;
+				}
+				int sum = 0;
+				for(int index = 10; index > 1; index--) {
+					sum += Integer.parseInt(String.valueOf(isbn.charAt(10 - index))) * index;
+				}
+				//add the last digit
+				if(isbn.charAt(9) == 'X') {
+					sum += 10;
+				}
+				else {
+					sum += Integer.parseInt(String.valueOf(isbn.charAt(9)));
+				}
+				if(sum % 11 == 0) {
+					return true;
+				}
+				return false;
 	}
 
 	/**
@@ -572,7 +713,20 @@ public class EvaluationService {
 	 */
 	public boolean isPangram(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		//get rid of white space
+		string = string.replace(" ", "");
+		Map<Character, Integer> letters = new HashMap();
+		//will add a letter when found in the string
+		//map will have a size of 26
+		for(int i = 0; i < string.length(); i++) {
+			if(letters.containsKey(string.charAt(i))) {
+				letters.replace(string.charAt(i), letters.get(string.charAt(i) + 1));
+			}  
+			else {
+				letters.put(string.charAt(i), 1);
+			}
+		}
+		return letters.size() == 26;
 	}
 
 	/**
@@ -585,6 +739,23 @@ public class EvaluationService {
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
 		// TODO Write an implementation for this method declaration
+		// we will have variables for how many seconds are in each minutes, hours, etc
+		Long gigasecond = 1000000000L;
+		int minute = 60;
+		int hour = minute * 60;
+		int day = hour * 25;
+		int year = 365 * day;
+		//now we convert everything to gigaseconds
+		int years = 0; //there are x years in a gigasecond
+		int days = 0;
+		int hours = 0;
+		int minutes = 0;
+		int seconds = 0;
+		while(gigasecond / year >= 1) {
+			gigasecond /= year;
+			years++;
+		}
+		
 		return null;
 	}
 
