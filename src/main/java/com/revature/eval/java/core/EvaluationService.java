@@ -335,6 +335,10 @@ public class EvaluationService {
 						|| words[i].charAt(0) == 'o' || words[i].charAt(0) == 'u')) {
 					char con = words[i].charAt(0);
 					words[i] = words[i].substring(1) + con;
+					if(con == 'q') {
+						con = words[i].charAt(0);
+						words[i] = words[i].substring(1) + con;
+					}
 				}
 				words[i] += "ay";
 			}
@@ -349,6 +353,10 @@ public class EvaluationService {
 					|| string.charAt(0) == 'o' || string.charAt(0) == 'u')) {
 				char con = string.charAt(0);
 				string = string.substring(1) + con;
+				if(con == 'q') {
+					con = string.charAt(0);
+					string = string.substring(1) + con;
+				}
 			}
 			string += "ay";
 			
@@ -774,7 +782,26 @@ public class EvaluationService {
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		List<Integer> numbers = new ArrayList<>();
+		for(int number : set) {
+			int multiple = 1;
+			while(multiple * number < i) {
+				if(numbers.contains(multiple * number)) {
+					multiple++;
+				}
+				else {
+					numbers.add(multiple * number);
+					multiple++;
+					
+				}
+			}
+		}
+		int sum = 0;
+		for(int number : numbers) {
+			sum += number;
+		}
+		
+		return sum;
 	}
 
 	/**
@@ -815,6 +842,35 @@ public class EvaluationService {
 	 */
 	public boolean isLuhnValid(String string) {
 		// TODO Write an implementation for this method declaration
+		if(string.length() <= 1) {
+			return false;
+		}
+		//get rid of white spaces
+		string = string.replace(" ", "");
+		//check for non digits
+		if(string.split("\\d").length > 0) {
+			return false;
+		}
+		int sum = 0;
+		int number;
+		//double the number every other time
+		boolean doub = false;
+		for(int i = string.length() - 1; i >= 0; i--) {
+			number = Integer.parseInt(String.valueOf(string.charAt(i)));
+			if(doub) {
+				number *= 2;
+			}
+			if(number > 9) {
+				number -= 9;
+			}
+			sum += number;	
+			//if we doubled this number we don't need to double the next
+			//and if we didn't double this number we need to double the next
+			doub = doub ? false : true;
+		}
+		if(sum % 10 == 0) {
+			return true;
+		}
 		return false;
 	}
 
@@ -847,7 +903,47 @@ public class EvaluationService {
 	 */
 	public int solveWordProblem(String string) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		int leftNum;
+		int rightNum;
+		String lNum = "";
+		String rNum = "";
+		int answer = 0;
+		String[] numbers = string.split("\\D", 0);
+		for(String number : numbers) {
+			if(!number.equals("") && lNum.equals("")) {
+				lNum = number;
+			}
+			if(!number.equals("") && !lNum.equals("")) {
+				rNum = number;
+			}
+		}
+		leftNum = Integer.parseInt(lNum);
+		rightNum = Integer.parseInt(rNum);
+		//check if the negative sign is there
+		if(string.charAt(string.indexOf(lNum.charAt(0)) - 1) == '-')
+		{
+			leftNum *= -1;
+			
+		}
+		if(string.charAt(string.indexOf(rNum.charAt(0), 9 + lNum.length()) - 1) == '-') {
+			rightNum *= -1;
+		}
+		if(string.contains("plus")) {
+			answer = leftNum + rightNum;
+		}
+		else if(string.contains("minus")) {
+			answer = leftNum - rightNum;
+		}
+		else if(string.contains("multiplied")) {
+			answer = leftNum * rightNum;
+		}
+		else if(string.contains("divided")) {
+			answer = leftNum / rightNum;
+		}
+		else {
+			
+		}
+		return answer;
 	}
 
 }
